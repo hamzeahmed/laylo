@@ -1,0 +1,70 @@
+<%- include('header'); -%>
+    <br>
+    <div class="container ">
+        <div class="row text-center">
+            <div class="col-md-8 mx-auto">
+                <div class="card ">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user"></i> New customer</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" accept="customers/new_customer" class="row g-3 needs-validation" novalidate>
+                            <div class="col-md-12">
+                                <input type="text" placeholder="Full Name" name="fullName" class="form-control" id="validationCustom01"
+                                    required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid full Name.
+                                    </div>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" name="address" id="validationCustom02" placeholder="address" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid address.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group has-validation">
+                                    <input type="number" class="form-control" id="validationCustomUsername"
+                                        aria-describedby="inputGroupPrepend" name="phone" placeholder="phone" required>
+                                    <div class="invalid-feedback">
+                                        Please put Phone Number.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control"  name="description"placeholder="description"
+                                    id="validationCustom03" required>
+                                
+                            </div>
+
+                    </div>
+                    <div class="card-footer d-grid gap-2 ">
+                        <input type="submit" class="btn rounded-pill btn-outline-success" value="submit"></input>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </br>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+    <%- include ('footer'); %>

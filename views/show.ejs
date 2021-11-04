@@ -1,0 +1,79 @@
+<%- include('header');-%>
+    <div class="container">
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><%= customer.name%></td>
+                    <td><%= customer.address%></td>
+                    <td><%= customer.phone%></td>
+                    <td><%= customer.description%></td>
+                    <td><%= total%></td>
+                </tr>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-6">
+                <a href=" <%=customer._id%>/new_deposit" class="btn rounded-pill btn-outline-warning"><i class="fas fa-dollar-sign"></i> Deposits <i class="fas fa-cart-plus"></i>  </a>
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col"> Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Description</th>
+                            
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% depositList.forEach((deposit)=>{ %>
+                        <tr>
+                            <td><%= deposit.date  %></td>
+                            <td>$<%= deposit.amount%></td>
+                            <td><%= deposit.description%></td>
+                        </tr>
+                        <% }); %>
+                       
+                    </tbody>
+                </table>
+                <h3 class="btn rounded-pill btn-outline-primary bold">TOTAL = $<%= total_deposits%></h3>
+            </div>
+            <div class="col-md-6">
+                <a href=" <%=customer._id%>/new_product" class="btn rounded-pill btn-outline-warning"><i class="fas fa-luggage-cart"></i> Products <i class="fab fa-opencart"></i> </a>
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col"> Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Subtotal</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% productList.forEach((product)=>{ %>
+                        <tr>
+                            <td><%= product.name%></td>
+                            <td><%= product.price%></td>
+                            <td><%= product.quantity%></td>
+                            <td><%= product.subtotal%></td>
+                            <td><%= product.description%></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <h3 class="btn rounded-pill btn-outline-primary bold">TOTAL = $<%= total_products%></h3>
+
+            </div>
+        </div>
+    </div>
+    <%- include('footer') -%>
