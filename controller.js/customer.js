@@ -1,6 +1,10 @@
 const Customer = require('../models/customerModel');
 const Deposit = require('../models/depositModel');
 const Product = require('../models/productModel');
+const fs = require('fs');
+const pdf = require('pdf-creator-node');
+const path = require('path');
+const options = require('../helpers/options');
 module.exports = {
     index: async (req, res, next) => {
         const customers = await Customer.find({});
@@ -25,34 +29,92 @@ module.exports = {
     show: async (req, res, next) => {
         const { customerId } = req.params;
         const customer = await Customer.findById(customerId).populate('deposits').populate('products');
+        const html = fs.readFileSync(path.join(__dirname, '../views/template.html'), 'utf-8');
+        const filename = customer.name + Math.random() + '_doc' + '.pdf';
+        let arrayProducts = [];
+        let arrayDeposits = [];
         let sub_total_product = 0;
         let total_deposits = 0;
-        let total_products=0;
+        let total_products = 0;
         let total = 0;
         if (customer) {
             customer.deposits.forEach(deposit => {
+                const depo ={
+                    date: deposit.date,
+                    amount: deposit.amount,
+                    description: deposit.description
+                }
+                arrayDeposits.push(depo);
                 total_deposits += parseInt(deposit.amount);
                 return total_deposits;
             });
-            for(let i=0; i<customer.products.length; i++){
-                customer.products.forEach(product=>{
-                    product.subtotal = product.price*product.quantity
-                    console.log(sub_total_product)
+            for (let i = 0; i < customer.products.length; i++) {
+                customer.products.forEach(product => {
+                    product.subtotal = product.price * product.quantity
                 });
             }
-            customer.products.forEach(product =>{
+            customer.products.forEach(product => {
+                const prod = {
+                    name: product.name,
+                    description: product.description,
+                    price: product.price,
+                    quantity: product.quantity,
+                    total: product.quantity * product.price,
+                }
+                arrayProducts.push(prod);
                 total_products += parseInt(product.subtotal);
-                console.log(product.price)
                 return total_products
             })
-          
+
             total = total_deposits - total_products
-         
-         
+
+
         }
+    
+
+        let subtotal = 0;
+        arrayProducts.forEach(i => {
+            subtotal += i.total
+        });
+        const objProducts = {
+            prodlist: arrayProducts,
+            subtotal: subtotal,
+        }
+        const objDeposits = {
+            depositList: arrayDeposits
+        }
+        const document = {
+            html: html,
+            data: {
+                total,
+                total_deposits,
+                total_products,
+                products: objProducts,
+                customerName: customer.name,
+                customerAddress: customer.address,
+                customerPhone: customer.phone,
+                customerCreatedAt: customer.createdAt.toLocaleString('en', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  }),
+                deposits: objDeposits
+            },
+            path: './docs/' + filename,
+            type: "pdf",
+        }
+        console.log(document)
+        pdf.create(document, options)
+            .then(res => {
+                console.log(res);
+            }).catch(error => {
+                console.log(error);
+            });
+        const filepath = 'http://localhost:3000/docs/' + filename;
         res.render("show.ejs",
             {
-                customer: customer,
+                path: filepath,
+                customer,
                 depositList: customer.deposits,
                 total_deposits: total_deposits,
                 total_products: total_products,
@@ -61,6 +123,8 @@ module.exports = {
 
             })
     },
+    
+
     customer_new_deposit: async (req, res, next) => {
         res.render("new_deposit")
     },

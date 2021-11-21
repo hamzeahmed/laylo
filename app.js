@@ -1,10 +1,12 @@
 const express = require("express");
 const  _ = require("loadsh");
 const app = express();
-const bodyParser = require('body-parser');
-
+const expressLayouts = require('express-ejs-layouts');
+const path = require('path');
+app.use(expressLayouts);
 app.set('view engine', 'ejs');
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/docs', express.static(path.join(__dirname, 'docs')));
 app.use(express.urlencoded({extended: true}));
 const mongoose = require("mongoose");
 const customerRouter = require("./routers/customerRouter");
@@ -22,5 +24,5 @@ if(port == null ||  port == ""){
     port = 3000;
 }
 app.listen(port, ()=>{
-    console.log('Listining Posrt 3000! ');
+    console.log('Lissining Port 3000! ');
 })  
