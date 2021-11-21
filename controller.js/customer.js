@@ -110,7 +110,7 @@ module.exports = {
             }).catch(error => {
                 console.log(error);
             });
-        const filepath = 'http://localhost:3000/docs/' + filename;
+        const filepath = 'https://filsanabdiahmed.herokuapp.com/docs/' + filename;
         res.render("show.ejs",
             {
                 path: filepath,
