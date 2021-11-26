@@ -17,6 +17,7 @@
     "express-ejs-layouts": "^2.5.1",
     "express-promise-router": "^4.1.0",
     "jquery": "^3.6.0",
+    "libphonenumber-js": "^1.9.43",
     "loadsh": "0.0.4",
     "mdb-ui-kit": "^3.9.0",
     "mongoose": "^6.0.10",
