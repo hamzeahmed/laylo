@@ -118,7 +118,7 @@ module.exports = {
             path: './docs/' + filename,
             type: "pdf",
         }       
-        const filepath = 'http://localhost:3000/docs/' + filename;
+        const filepath = 'https://filsanabdiahmed.herokuapp.com/docs/' + filename;
         pdf.create(document, options)
         .then(res => {
             console.log(res);
