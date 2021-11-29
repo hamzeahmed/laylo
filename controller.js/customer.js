@@ -1,10 +1,12 @@
 const Customer = require('../models/customerModel');
 const Deposit = require('../models/depositModel');
 const Product = require('../models/productModel');
+const Service = require('../models/serviceModel');
 const fs = require('fs');
 const pdf = require('pdf-creator-node');
 const path = require('path');
 const options = require('../helpers/options');
+const { reset } = require('nodemon');
 module.exports = {
     index: async (req, res, next) => {
         const customers = await Customer.find({});
@@ -29,14 +31,16 @@ module.exports = {
     
     show: async (req, res, next) => {
         const { customerId } = req.params;
-        const customer = await Customer.findById(customerId).populate('deposits').populate('products');
+        const customer = await Customer.findById(customerId).populate('deposits').populate('products').populate('services');
         const html = fs.readFileSync(path.join(__dirname, '../views/template.html'), 'utf-8');
         const filename = customer.name + Math.random() + '_doc' + '.pdf';
         let arrayProducts = [];
         let arrayDeposits = [];
+        let arrayServices = []
         let sub_total_product = 0;
         let total_deposits = 0;
         let total_products = 0;
+        let total_services = 0
         let total = 0;
         if (customer) {
             customer.deposits.forEach(deposit => {
@@ -66,8 +70,17 @@ module.exports = {
                 total_products += parseInt(product.subtotal);
                 return total_products
             })
+            customer.services.forEach(service =>{
+                const serv ={
+                    amount: service.amount,
+                    description: service.description
+                }
+                arrayServices.push(serv)
+                total_services += parseInt(service.amount);
+                return total_services;
+            })
 
-            total = total_deposits - total_products
+            total = total_deposits - total_products - total_services
 
 
         }
@@ -80,15 +93,20 @@ module.exports = {
         const objProducts = {
             prodlist: arrayProducts,
             subtotal: subtotal,
+
         }
         const objDeposits = {
             depositList: arrayDeposits
+        }
+        const objServices = {
+            serviceList: arrayServices
         }
         const document = {
             html: html,
             data: {
                 total,
                 total_deposits,
+                total_products,
                 total_products,
                 products: objProducts,
                 customerName: customer.name,
@@ -99,7 +117,8 @@ module.exports = {
                     day: 'numeric',
                     year: 'numeric',
                   }),
-                deposits: objDeposits
+                deposits: objDeposits,
+                services: objServices
             },
             path: './docs/' + filename,
             type: "pdf",
@@ -119,8 +138,10 @@ module.exports = {
                 depositList: customer.deposits,
                 total_deposits: total_deposits,
                 total_products: total_products,
+                total_services: total_services,
                 total: total,
-                productList: customer.products
+                productList: customer.products,
+                serviceList: customer.services
 
             })
     },
@@ -177,8 +198,33 @@ module.exports = {
     },
     customer_delete_product: async(req, res, next)=>{
         const  {customerId, productId} = req.params; 
-        const product = await Product.findById(productId)
-        await product.deleteOne({_id: productId});
+        await Product.deleteOne({_id: productId});
         res.redirect(`/customers/${customerId}`)
+    },
+
+    customer_new_service: async( req, res, next)=>{
+        res.render("new_service")
+    },
+
+    customer_create_service: async(req, res, next)=>{
+        const {customerId} = req.params;
+        const  customer = await Customer.findById(customerId);
+        const newService = new Service({
+            amount: req.body.amount,
+            description: req.body.description
+        });
+        newService.customer = customer;
+        await newService.save();
+        customer.services.push(newService);
+        await customer.save();
+        res.redirect(`/customers/${customerId}`)
+    },
+
+    customer_delete_service: async(req, res, next)=>{
+        const {customerId , serviceId} = req.params;
+        console.log(customerId, serviceId);
+        await Service.deleteOne({_id: serviceId});
+        console.log("Deleted ++++++++++++++++++++++++++++++++++++++++")
+        res.redirect(`/customers/${customerId}`);
     }
 }

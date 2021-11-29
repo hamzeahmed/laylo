@@ -23,6 +23,10 @@ const customerSchema = new Schema({
     products: [{
         type: Schema.Types.ObjectId,
         ref: 'product'
+    }],
+    services: [{
+        type: Schema.Types.ObjectId,
+        ref: 'service'
     }]
 }, { timestamps: true });
 

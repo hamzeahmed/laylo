@@ -23,5 +23,11 @@ router.route('/:customerId/new_product')
     .get(customerController.customer_new_product)
     .post(customerController.customer_create_product);
 router.route('/:customerId/:productId/delete')
-    .post(customerController.customer_delete_product)
+    .post(customerController.customer_delete_product);
+
+router.route('/:customerId/new_service')
+    .get(customerController.customer_new_service)
+    .post(customerController.customer_create_service);
+router.route('/:customerId/:serviceId/delete')
+    .post(customerController.customer_delete_service);
 module.exports = router;

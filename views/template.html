@@ -98,14 +98,33 @@
                 {{/each}}
             </tbody>
         </table>
+        <h3 class="btn rounded-pill btn-outline-warning"><i class="fas fa-dollar-sign"></i> Services <i
+                class="fab fa-servicestack"></i> </h3>
+        <table style="width:70%" class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th scope="col"> Amount</th>
+                    <th scope="col"> Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each services.serviceList}}
+                <tr>
+                    <td>${{this.amount}}</td>
+                    <td>{{this.description}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
-    <table align="right" style="width: 50%;" class="table table-hover table-sm" width="30%" border="0" cellspacing="0" cellpadding="0">
+    <table align="right" style="width: 50%;" class="table table-hover table-sm" width="30%" border="0" cellspacing="0"
+        cellpadding="0">
         <thead>
             <tr>
-                <td  bgcolor="#ffe77b" style="background-color: #fff;">
-                    <p style="font-weight: 900;color: #a52a2a;">Total Deposit  </p>
+                <td bgcolor="#ffe77b" style="background-color: #fff;">
+                    <p style="font-weight: 900;color: #a52a2a;">Total Deposit </p>
                 </td>
-                <td  bgcolor="#ffe77b" style="background-color: #fff;">
+                <td bgcolor="#ffe77b" style="background-color: #fff;">
                     <p style="font-weight: 900;color: #a52a2a;">Total Products</p>
                 </td>
                 <td bgcolor="#ffe77b" style="background-color: #fff;">
@@ -120,7 +139,7 @@
                 <td>${{total}}</td>
             </tr>
         </tbody>
-        
+
     </table>
 </body>
 

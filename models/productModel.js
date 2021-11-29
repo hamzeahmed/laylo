@@ -26,11 +26,5 @@ const productSchema = new Schema({
 
 
 const Product = mongoose.model('product', productSchema);
-Product.aggregate([
-    {
-        $project:{
-            subTotal:{$sum: "$price"}
-        }
-    }
-])
+
 module.exports = Product
