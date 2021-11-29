@@ -79,13 +79,8 @@ module.exports = {
                 total_services += parseInt(service.amount);
                 return total_services;
             })
-
             total = total_deposits - total_products - total_services
-
-
         }
-    
-
         let subtotal = 0;
         arrayProducts.forEach(i => {
             subtotal += i.total
@@ -107,7 +102,7 @@ module.exports = {
                 total,
                 total_deposits,
                 total_products,
-                total_products,
+                total_services,
                 products: objProducts,
                 customerName: customer.name,
                 customerAddress: customer.address,
@@ -122,15 +117,14 @@ module.exports = {
             },
             path: './docs/' + filename,
             type: "pdf",
-        }
-        console.log(document)
+        }       
+        const filepath = 'http://localhost:3000/docs/' + filename;
         pdf.create(document, options)
-            .then(res => {
-                console.log(res);
-            }).catch(error => {
-                console.log(error);
-            });
-        const filepath = 'https://filsanabdiahmed.herokuapp.com/docs/' + filename;
+        .then(res => {
+            console.log(res);
+        }).catch(error => {
+            console.log(error);
+        });
         res.render("show.ejs",
             {
                 path: filepath,
