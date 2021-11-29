@@ -26,6 +26,7 @@ module.exports = {
         await newCustomer.save()
         res.redirect('/customers')
     },
+    
     show: async (req, res, next) => {
         const { customerId } = req.params;
         const customer = await Customer.findById(customerId).populate('deposits').populate('products');
@@ -124,6 +125,12 @@ module.exports = {
             })
     },
     
+    delete: async (req,res, next) =>{
+        const { customerId } = req.params;
+        console.log(customerId)
+        await Customer.deleteOne({_id: customerId});
+        res.redirect('/customers')
+    },
 
     customer_new_deposit: async (req, res, next) => {
         res.render("new_deposit")
@@ -144,7 +151,11 @@ module.exports = {
         await customer.save();
         res.redirect(`/customers/${customerId}`)
     },
-
+    customer_delete_deposit: async(req, res, next)=>{
+        const {customerId ,  depositId} = req.params;
+        await Deposit.deleteOne({_id: depositId});
+        res.redirect(`/customers/${customerId}`);
+    },
     customer_new_product: async (req, res, next) => {
         res.render('new_product.ejs');
     },
@@ -163,5 +174,11 @@ module.exports = {
         customer.products.push(newProduct);
         await customer.save();
         res.redirect(`/customers/${customerId}`);
+    },
+    customer_delete_product: async(req, res, next)=>{
+        const  {customerId, productId} = req.params; 
+        const product = await Product.findById(productId)
+        await product.deleteOne({_id: productId});
+        res.redirect(`/customers/${customerId}`)
     }
 }

@@ -74,6 +74,10 @@
                             <td>
                                 <%= deposit.description%>
                             </td>
+                            <form action="/customers/<%= customer._id %>/<%= deposit._id%>/delete?_method=delete" method="post"
+                                class="d-inline">
+                                <td><input type="submit" class="btn rounded-pill btn-outline-danger" value="Delete" onclick="return confirm('Ma Hubtaa Inad Masaxdid')"></td>
+                            </form>
                         </tr>
                         <% }); %>
 
@@ -111,6 +115,11 @@
                             <td>
                                 <%= product.description%>
                             </td>
+                            <form action="/customers/<%= customer._id %>/<%= product._id%>/delete?_method=delete" method="post"
+                                class="d-inline">
+                                <td><input type="submit" class="btn rounded-pill btn-outline-danger" value="Delete" onclick="return confirm('Ma Hubtaa Inad Masaxdid')"></td>
+                            </form>
+
                         </tr>
                         <% }); %>
                 </tbody>
